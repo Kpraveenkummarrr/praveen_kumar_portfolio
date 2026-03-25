@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praveen Kumar — PHP Backend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  --white:   #ffffff;
+  --off:     #f7f8fa;
+  --light:   #eef0f5;
+  --border:  #e2e5ec;
+  --muted:   #8b92a5;
+  --body:    #3d4455;
+  --heading: #111827;
+  --navy:    #0f2044;
+  --blue:    #1d4ed8;
+  --blue-lt: #eff4ff;
+  --blue-md: #dbeafe;
+  --green:   #059669;
+  --green-lt:#ecfdf5;
+  --font:    'Outfit', sans-serif;
+  --serif:   'Lora', serif;
+  --radius:  12px;
+  --shadow:  0 2px 16px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.10);
+}
+
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 40px;
+  height: 66px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  font-weight: 700; font-size: 1.05rem;
+  color: var(--navy);
+  letter-spacing: -0.3px;
+}
+.nav-brand span { color: var(--blue); }
+.nav-menu { display: flex; gap: 6px; list-style: none; }
+.nav-menu a {
+  font-size: 0.875rem; font-weight: 500;
+  color: var(--muted);
+  padding: 7px 14px; border-radius: 8px;
+  transition: background 0.18s, color 0.18s;
+}
+.nav-menu a:hover, .nav-menu a.active {
+  background: var(--blue-lt);
+  color: var(--blue);
+}
+.nav-cta {
+  font-size: 0.85rem; font-weight: 600;
+  background: var(--navy); color: var(--white);
+  padding: 9px 20px; border-radius: 8px;
+  transition: background 0.18s, transform 0.18s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.nav-cta:hover { background: var(--blue); transform: translateY(-1px); }
+
+/* ══════════════════════════════════════
+   PAGE WRAPPER
+══════════════════════════════════════ */
+.page { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+#hero {
+  padding-top: 130px; padding-bottom: 100px;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 60px; align-items: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-lt);
+  border: 1px solid #a7f3d0;
+  color: var(--green);
+  font-size: 0.78rem; font-weight: 600;
+  padding: 5px 12px; border-radius: 20px;
+  margin-bottom: 24px;
+}
+.hero-badge::before {
+  content: '';
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(1.4); }
+}
+.hero-name {
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  font-weight: 800; line-height: 1.1;
+  letter-spacing: -1.5px; color: var(--heading);
+  margin-bottom: 10px;
+}
+.hero-name .accent { color: var(--blue); }
+.hero-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.15rem; color: var(--muted);
+  margin-bottom: 24px;
+}
+.hero-bio {
+  font-size: 1rem; color: var(--body); line-height: 1.75;
+  max-width: 500px; margin-bottom: 36px;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-solid {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--navy); color: var(--white);
+  font-size: 0.88rem; font-weight: 600;
+  padding: 12px 24px; border-radius: 9px;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+.btn-solid:hover {
+  background: var(--blue);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(29,78,216,0.3);
+}
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--white); color: var(--navy);
+  font-size: 0.88rem; font-weight: 600;
+  padding: 11px 24px; border-radius: 9px;
+  border: 1.5px solid var(--border);
+  transition: border-color 0.18s, transform 0.18s;
+}
+.btn-ghost:hover { border-color: var(--navy); transform: translateY(-2px); }
+
+/* Hero card */
+.hero-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.hero-card-top {
+  background: var(--navy);
+  padding: 32px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 800; color: #fff;
+  font-family: var(--font);
+  border: 3px solid rgba(255,255,255,0.15);
+}
+.card-name {
+  font-size: 1.1rem; font-weight: 700; color: #fff; text-align: center;
+}
+.card-role {
+  font-size: 0.8rem; color: rgba(255,255,255,0.55);
+  text-align: center;
+}
+.card-avail {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(16,185,129,0.15);
+  border: 1px solid rgba(16,185,129,0.3);
+  color: #6ee7b7;
+  font-size: 0.72rem; font-weight: 600;
+  padding: 4px 11px; border-radius: 20px;
+}
+.card-avail::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #10b981; animation: pulse 2s infinite;
+}
+.hero-card-body { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.card-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.85rem;
+}
+.card-key { color: var(--muted); font-weight: 500; }
+.card-val { color: var(--heading); font-weight: 600; }
+.card-divider { height: 1px; background: var(--border); }
+.card-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.cs {
+  background: var(--blue-lt); color: var(--blue);
+  font-size: 0.72rem; font-weight: 600;
+  padding: 4px 10px; border-radius: 6px;
+}
+
+/* Stat strip */
+.stat-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border-radius: 12px; overflow: hidden;
+  margin-top: 48px;
+  border: 1px solid var(--border);
+}
+.stat-cell {
+  background: var(--white); padding: 22px 20px; text-align: center;
+}
+.stat-n {
+  font-size: 1.9rem; font-weight: 800; color: var(--heading);
+  letter-spacing: -1px; line-height: 1;
+}
+.stat-n b { color: var(--blue); font-weight: 800; }
+.stat-t { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+/* ══════════════════════════════════════
+   SECTION SHARED
+══════════════════════════════════════ */
+.section { padding: 90px 0; }
+.section-alt { background: var(--off); }
+.section-border { border-top: 1px solid var(--border); }
+.eyebrow {
+  display: inline-block;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--blue); margin-bottom: 10px;
+}
+.section-h {
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 800; color: var(--heading);
+  letter-spacing: -0.8px; margin-bottom: 12px;
+}
+.section-p { font-size: 0.97rem; color: var(--muted); max-width: 480px; }
+
+/* ══════════════════════════════════════
+   SKILLS
+══════════════════════════════════════ */
+.skills-layout {
+  display: grid; grid-template-columns: 260px 1fr;
+  gap: 60px; align-items: start; margin-top: 56px;
+}
+.skills-cats { display: flex; flex-direction: column; gap: 6px; }
+.scat-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px; border-radius: 10px;
+  font-size: 0.9rem; font-weight: 600; color: var(--body);
+  background: transparent; border: none; cursor: pointer;
+  text-align: left; width: 100%;
+  transition: background 0.15s, color 0.15s;
+}
+.scat-btn .icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--light); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+  transition: background 0.15s;
+}
+.scat-btn:hover, .scat-btn.active {
+  background: var(--blue-lt); color: var(--blue);
+}
+.scat-btn:hover .icon, .scat-btn.active .icon {
+  background: var(--blue-md);
+}
+.skills-panel { display: none; }
+.skills-panel.show { display: block; }
+.panel-title {
+  font-size: 1rem; font-weight: 700; color: var(--heading); margin-bottom: 20px;
+}
+.skill-bars { display: flex; flex-direction: column; gap: 16px; }
+.skill-bar-row { }
+.sb-top { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.sb-name { font-size: 0.88rem; font-weight: 600; color: var(--heading); }
+.sb-pct { font-size: 0.78rem; font-weight: 600; color: var(--blue); }
+.sb-track {
+  height: 7px; background: var(--light); border-radius: 99px; overflow: hidden;
+}
+.sb-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--blue), #6366f1);
+  width: 0; transition: width 1s cubic-bezier(.4,0,.2,1);
+}
+
+/* ══════════════════════════════════════
+   EXPERIENCE
+══════════════════════════════════════ */
+.exp-cards { display: flex; flex-direction: column; gap: 20px; margin-top: 56px; }
+.exp-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.exp-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.exp-card-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 28px 32px 24px; gap: 20px;
+}
+.exp-logo {
+  width: 50px; height: 50px; border-radius: 12px;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1rem; color: #fff;
+  flex-shrink: 0;
+}
+.exp-meta { flex: 1; }
+.exp-company { font-size: 1.1rem; font-weight: 700; color: var(--heading); margin-bottom: 3px; }
+.exp-pos { font-size: 0.88rem; color: var(--muted); font-weight: 500; }
+.exp-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--blue-lt); color: var(--blue);
+  font-size: 0.72rem; font-weight: 600;
+  padding: 5px 12px; border-radius: 20px; flex-shrink: 0;
+}
+.exp-badge.current {
+  background: var(--green-lt); color: var(--green);
+  border: 1px solid #a7f3d0;
+}
+.exp-badge.current::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); animation: pulse 2s infinite;
+}
+.exp-card-body {
+  padding: 0 32px 28px;
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+}
+.exp-points {
+  list-style: none; display: flex; flex-direction: column; gap: 9px;
+  padding-top: 22px;
+}
+.exp-points li {
+  display: flex; gap: 12px;
+  font-size: 0.9rem; color: var(--body); line-height: 1.6;
+}
+.exp-points li::before {
+  content: '';
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--blue); flex-shrink: 0; margin-top: 7px;
+}
+
+/* ══════════════════════════════════════
+   PROJECTS
+══════════════════════════════════════ */
+.proj-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; margin-top: 56px;
+}
+.proj-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+}
+.proj-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: #c7d8ff;
+}
+.proj-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; margin-bottom: 4px;
+}
+.proj-name {
+  font-size: 0.97rem; font-weight: 700; color: var(--heading); line-height: 1.3;
+}
+.proj-desc {
+  font-size: 0.84rem; color: var(--muted); line-height: 1.65;
+  flex: 1;
+}
+.proj-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
+.proj-tag {
+  background: var(--off); color: var(--body);
+  font-size: 0.7rem; font-weight: 600;
+  padding: 3px 9px; border-radius: 5px;
+  border: 1px solid var(--border);
+}
+
+/* ══════════════════════════════════════
+   CONTACT
+══════════════════════════════════════ */
+.contact-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: start; margin-top: 56px;
+}
+.contact-info { display: flex; flex-direction: column; gap: 14px; }
+.cinfo-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; text-decoration: none; color: inherit;
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
+}
+.cinfo-card:hover {
+  border-color: #bfcfff; box-shadow: var(--shadow);
+  transform: translateX(4px);
+}
+.cicon {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: var(--blue-lt); display: flex; align-items: center;
+  justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+}
+.cl { font-size: 0.7rem; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
+.cv { font-size: 0.88rem; font-weight: 600; color: var(--heading); }
+
+.contact-form { background: var(--off); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+.cf-title { font-size: 1.05rem; font-weight: 700; color: var(--heading); margin-bottom: 22px; }
+.cf { display: flex; flex-direction: column; gap: 14px; }
+.cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.flabel { font-size: 0.75rem; font-weight: 600; color: var(--body); text-transform: uppercase; letter-spacing: 0.7px; }
+.finput, .ftextarea {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 8px; padding: 11px 14px;
+  font-family: var(--font); font-size: 0.88rem; color: var(--heading);
+  outline: none; width: 100%;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.finput:focus, .ftextarea:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(29,78,216,0.08);
+}
+.ftextarea { resize: vertical; min-height: 110px; }
+.fsend {
+  width: 100%; background: var(--navy); color: var(--white);
+  font-family: var(--font); font-size: 0.9rem; font-weight: 600;
+  padding: 13px; border: none; border-radius: 9px; cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+}
+.fsend:hover { background: var(--blue); transform: translateY(-1px); }
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer {
+  border-top: 1px solid var(--border);
+  background: var(--navy);
+  padding: 40px 0;
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 40px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-left .fn { font-weight: 700; color: #fff; font-size: 0.95rem; margin-bottom: 4px; }
+.footer-left .ft { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+.footer-links { display: flex; gap: 8px; }
+.footer-links a {
+  font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.55);
+  padding: 7px 14px; border-radius: 7px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.15s, color 0.15s;
+}
+.footer-links a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+/* ══════════════════════════════════════
+   REVEAL
+══════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width: 960px) {
+  #hero { grid-template-columns: 1fr; }
+  .hero-card { max-width: 380px; }
+  .skills-layout { grid-template-columns: 1fr; }
+  .proj-grid { grid-template-columns: 1fr 1fr; }
+  .contact-wrap { grid-template-columns: 1fr; }
+}
+@media(max-width: 660px) {
+  .page { padding: 0 20px; }
+  .nav-inner { padding: 0 20px; }
+  .nav-menu { display: none; }
+  .proj-grid { grid-template-columns: 1fr; }
+  .cf-row { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+  .exp-card-head { flex-direction: column; }
+  .stat-strip { grid-template-columns: repeat(3,1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">Praveen <span>Kumar</span></div>
+    <ul class="nav-menu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="mailto:pk830515@gmail.com" class="nav-cta">✉ Hire Me</a>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section id="about">
+  <div class="page">
+    <div id="hero">
+      <div>
+        <div class="hero-badge">Available for full-time roles</div>
+        <h1 class="hero-name">Praveen<br><span class="accent">Kumar</span></h1>
+        <p class="hero-title">PHP Backend Developer & API Specialist</p>
+        <p class="hero-bio">
+          I build scalable, clean backend systems using <strong>Laravel</strong> and <strong>CodeIgniter 3</strong>. 
+          With 2+ years delivering enterprise HRMS, CRM, logistics, and booking platforms, 
+          I turn complex backend challenges into reliable, maintainable solutions.
+        </p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn-solid">View Projects →</a>
+          <a href="#contact" class="btn-ghost">Contact Me</a>
+        </div>
+
+        <div class="stat-strip">
+          <div class="stat-cell">
+            <div class="stat-n">2<b>+</b></div>
+            <div class="stat-t">Years Experience</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-n">6<b>+</b></div>
+            <div class="stat-t">Projects Delivered</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-n">2</div>
+            <div class="stat-t">Companies</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Card -->
+      <div>
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <div class="avatar">PK</div>
+            <div>
+              <div class="card-name">Praveen Kumar</div>
+              <div class="card-role">PHP Backend Developer</div>
+            </div>
+            <div class="card-avail">Open to Work</div>
+          </div>
+          <div class="hero-card-body">
+            <div class="card-row">
+              <span class="card-key">📍 Location</span>
+              <span class="card-val">Tiruchirappalli, TN</span>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-row">
+              <span class="card-key">🎓 Education</span>
+              <span class="card-val">B.E. Computer Science</span>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-row">
+              <span class="card-key">💼 Experience</span>
+              <span class="card-val">2+ Years</span>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-row">
+              <span class="card-key">📧 Email</span>
+              <span class="card-val" style="font-size:0.8rem">pk830515@gmail.com</span>
+            </div>
+            <div class="card-divider"></div>
+            <div>
+              <div class="card-key" style="margin-bottom:10px;">🛠 Core Skills</div>
+              <div class="card-skills">
+                <span class="cs">Laravel</span>
+                <span class="cs">CodeIgniter 3</span>
+                <span class="cs">PHP</span>
+                <span class="cs">REST API</span>
+                <span class="cs">MySQL</span>
+                <span class="cs">Git</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SKILLS ════════════════ -->
+<section id="skills" class="section section-alt section-border">
+  <div class="page">
+    <div class="reveal">
+      <div class="eyebrow">Technical Expertise</div>
+      <h2 class="section-h">Skills & Technologies</h2>
+      <p class="section-p">A focused backend skillset refined through real enterprise project delivery.</p>
+    </div>
+    <div class="skills-layout reveal">
+      <div class="skills-cats">
+        <button class="scat-btn active" onclick="showPanel('backend', this)">
+          <div class="icon">⚙️</div> Backend
+        </button>
+        <button class="scat-btn" onclick="showPanel('frontend', this)">
+          <div class="icon">🖥️</div> Frontend
+        </button>
+        <button class="scat-btn" onclick="showPanel('database', this)">
+          <div class="icon">🗄️</div> Database
+        </button>
+        <button class="scat-btn" onclick="showPanel('api', this)">
+          <div class="icon">🔗</div> API & Integration
+        </button>
+        <button class="scat-btn" onclick="showPanel('tools', this)">
+          <div class="icon">🛠️</div> Tools & DevOps
+        </button>
+      </div>
+      <div>
+        <div class="skills-panel show" id="panel-backend">
+          <div class="panel-title">Backend Development</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">PHP</span><span class="sb-pct">92%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="92"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Laravel</span><span class="sb-pct">88%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="88"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">CodeIgniter 3</span><span class="sb-pct">90%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="90"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">MVC Architecture</span><span class="sb-pct">87%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="87"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="skills-panel" id="panel-frontend">
+          <div class="panel-title">Frontend Technologies</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">HTML5 / CSS3</span><span class="sb-pct">85%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="85"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">JavaScript</span><span class="sb-pct">78%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="78"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">jQuery / AJAX</span><span class="sb-pct">82%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="82"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Bootstrap 4/5</span><span class="sb-pct">84%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="84"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="skills-panel" id="panel-database">
+          <div class="panel-title">Database & Storage</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">MySQL</span><span class="sb-pct">89%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="89"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Database Design</span><span class="sb-pct">85%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="85"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Query Optimization</span><span class="sb-pct">83%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="83"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Indexing</span><span class="sb-pct">80%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="80"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="skills-panel" id="panel-api">
+          <div class="panel-title">API & Integration</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">REST API Development</span><span class="sb-pct">90%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="90"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">API Integration</span><span class="sb-pct">87%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="87"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">WooCommerce</span><span class="sb-pct">82%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="82"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">cURL / JSON</span><span class="sb-pct">85%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="85"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="skills-panel" id="panel-tools">
+          <div class="panel-title">Tools & DevOps</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Git / GitHub</span><span class="sb-pct">86%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="86"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Postman</span><span class="sb-pct">88%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="88"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Apache / Nginx</span><span class="sb-pct">78%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="78"></div></div>
+            </div>
+            <div class="skill-bar-row">
+              <div class="sb-top"><span class="sb-name">Composer</span><span class="sb-pct">84%</span></div>
+              <div class="sb-track"><div class="sb-fill" data-w="84"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ EXPERIENCE ════════════════ -->
+<section id="experience" class="section section-border">
+  <div class="page">
+    <div class="reveal">
+      <div class="eyebrow">Work History</div>
+      <h2 class="section-h">Professional Experience</h2>
+      <p class="section-p">2+ years building enterprise systems across multiple domains and clients.</p>
+    </div>
+    <div class="exp-cards">
+      <div class="exp-card reveal">
+        <div class="exp-card-head">
+          <div class="exp-logo">AT</div>
+          <div class="exp-meta">
+            <div class="exp-company">Ardhas Technology India Pvt Ltd</div>
+            <div class="exp-pos">Backend Developer · Tiruchirappalli, Tamil Nadu</div>
+          </div>
+          <div class="exp-badge current"><span>Jun 2024 – Present</span></div>
+        </div>
+        <div class="exp-card-body">
+          <ul class="exp-points">
+            <li>Architected and developed scalable backend systems for enterprise-grade applications using Laravel and CodeIgniter 3, improving code modularity and deployment efficiency.</li>
+            <li>Designed, built, and maintained RESTful APIs consumed by web and mobile clients, implementing proper authentication, versioning, and error handling standards.</li>
+            <li>Optimized critical MySQL queries and database schemas to reduce response time and improve performance across high-traffic systems.</li>
+            <li>Collaborated with frontend teams within Agile workflows to deliver features on schedule and resolve cross-functional issues.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-card reveal">
+        <div class="exp-card-head">
+          <div class="exp-logo" style="background:#374151;">ST</div>
+          <div class="exp-meta">
+            <div class="exp-company">Senchola Technology Solutions</div>
+            <div class="exp-pos">Backend Developer · Tiruchirappalli, Tamil Nadu</div>
+          </div>
+          <div class="exp-badge">Jun 2023 – Jun 2024</div>
+        </div>
+        <div class="exp-card-body">
+          <ul class="exp-points">
+            <li>Developed backend modules using PHP (CodeIgniter 3) for HRMS, CRM, and logistics-based platforms serving enterprise clients.</li>
+            <li>Integrated third-party APIs including payment gateways, logistics providers (Sagawa), and external data services.</li>
+            <li>Built custom WooCommerce plugins for warehouse automation, order management, and real-time shipment tracking.</li>
+            <li>Delivered backend systems for a Japan-based room booking platform including user management, availability logic, and booking workflows.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PROJECTS ════════════════ -->
+<section id="projects" class="section section-alt section-border">
+  <div class="page">
+    <div class="reveal">
+      <div class="eyebrow">Portfolio</div>
+      <h2 class="section-h">Key Projects</h2>
+      <p class="section-p">Enterprise systems delivered for real clients across India and Japan.</p>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card reveal">
+        <div class="proj-icon" style="background:#eff4ff;">👥</div>
+        <div class="proj-name">RBI HRMS System</div>
+        <div class="proj-desc">Full-featured HR management covering payroll, attendance tracking, leave management, and multi-branch employee records with role-based access control.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">CodeIgniter 3</span>
+          <span class="proj-tag">MySQL</span>
+          <span class="proj-tag">Bootstrap</span>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-icon" style="background:#fdf4ff;">🏨</div>
+        <div class="proj-name">Japan Room Booking Platform</div>
+        <div class="proj-desc">Real-time booking system with dynamic availability calendar, multi-user roles, and automated confirmation workflows for a Japan-based hospitality client.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">CodeIgniter 3</span>
+          <span class="proj-tag">MySQL</span>
+          <span class="proj-tag">AJAX</span>
+          <span class="proj-tag">Bootstrap</span>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-icon" style="background:#f0fdf4;">🛒</div>
+        <div class="proj-name">WooCommerce Automation Plugins</div>
+        <div class="proj-desc">Custom WordPress/WooCommerce plugins for warehouse inventory management, automated order processing, and shipment status tracking.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">WordPress</span>
+          <span class="proj-tag">WooCommerce</span>
+          <span class="proj-tag">MySQL</span>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-icon" style="background:#fff7ed;">🚚</div>
+        <div class="proj-name">Sagawa Logistics Integration</div>
+        <div class="proj-desc">End-to-end integration with Sagawa logistics API for automated shipment creation, label generation, and real-time delivery tracking.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">REST API</span>
+          <span class="proj-tag">JSON</span>
+          <span class="proj-tag">cURL</span>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-icon" style="background:#eff4ff;">📊</div>
+        <div class="proj-name">Sinohydro Project Dashboard</div>
+        <div class="proj-desc">Internal task and project monitoring dashboard with progress tracking, reporting modules, and live status updates for engineering project teams.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">Laravel</span>
+          <span class="proj-tag">MySQL</span>
+          <span class="proj-tag">Chart.js</span>
+          <span class="proj-tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-icon" style="background:#f0fdf4;">🌱</div>
+        <div class="proj-name">CSR Management System</div>
+        <div class="proj-desc">End-to-end modules for logging, tracking, and generating compliance reports for Corporate Social Responsibility activities and corporate governance.</div>
+        <div class="proj-tags">
+          <span class="proj-tag">PHP</span>
+          <span class="proj-tag">CodeIgniter 3</span>
+          <span class="proj-tag">MySQL</span>
+          <span class="proj-tag">Bootstrap</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ CONTACT ════════════════ -->
+<section id="contact" class="section section-border">
+  <div class="page">
+    <div class="reveal">
+      <div class="eyebrow">Get In Touch</div>
+      <h2 class="section-h">Let's Work Together</h2>
+      <p class="section-p">Open to full-time roles, MNC opportunities, and freelance projects. I respond within 24 hours.</p>
+    </div>
+    <div class="contact-wrap">
+      <div class="contact-info reveal">
+        <a class="cinfo-card" href="mailto:pk830515@gmail.com">
+          <div class="cicon">✉️</div>
+          <div><div class="cl">Email</div><div class="cv">pk830515@gmail.com</div></div>
+        </a>
+        <a class="cinfo-card" href="tel:+918248855619">
+          <div class="cicon">📱</div>
+          <div><div class="cl">Phone</div><div class="cv">+91 8248855619</div></div>
+        </a>
+        <a class="cinfo-card" href="https://linkedin.com/in/praveenkumark12" target="_blank">
+          <div class="cicon">💼</div>
+          <div><div class="cl">LinkedIn</div><div class="cv">linkedin.com/in/praveenkumark12</div></div>
+        </a>
+        <a class="cinfo-card" href="https://github.com/Kpraveenkummarrr" target="_blank">
+          <div class="cicon">⌨️</div>
+          <div><div class="cl">GitHub</div><div class="cv">github.com/Kpraveenkummarrr</div></div>
+        </a>
+        <div class="cinfo-card" style="cursor:default;">
+          <div class="cicon">📍</div>
+          <div><div class="cl">Location</div><div class="cv">Tiruchirappalli, Tamil Nadu, India</div></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="contact-form">
+          <div class="cf-title">Send a Message</div>
+          <div class="cf">
+            <div class="cf-row">
+              <div class="fg">
+                <label class="flabel">Full Name</label>
+                <input type="text" class="finput" placeholder="John Doe">
+              </div>
+              <div class="fg">
+                <label class="flabel">Email</label>
+                <input type="email" class="finput" placeholder="john@company.com">
+              </div>
+            </div>
+            <div class="fg">
+              <label class="flabel">Subject</label>
+              <input type="text" class="finput" placeholder="Job Opportunity / Freelance Project">
+            </div>
+            <div class="fg">
+              <label class="flabel">Message</label>
+              <textarea class="ftextarea" placeholder="Tell me about the role, project, or how I can help..."></textarea>
+            </div>
+            <button class="fsend" onclick="sendMsg(this)">Send Message →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="fn">Praveen Kumar</div>
+      <div class="ft">PHP Backend Developer · Tiruchirappalli, India</div>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:pk830515@gmail.com">Email</a>
+      <a href="https://linkedin.com/in/praveenkumark12" target="_blank">LinkedIn</a>
+      <a href="https://github.com/Kpraveenkummarrr" target="_blank">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      const delay = i * 70;
+      setTimeout(() => e.target.classList.add('in'), delay);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Active nav
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-menu a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 90) cur = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + cur));
+});
+
+// Skills panel switcher + bars
+function showPanel(id, btn) {
+  document.querySelectorAll('.skills-panel').forEach(p => p.classList.remove('show'));
+  document.querySelectorAll('.scat-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  panel.classList.add('show');
+  btn.classList.add('active');
+  setTimeout(() => animateBars(panel), 50);
+}
+function animateBars(panel) {
+  panel.querySelectorAll('.sb-fill').forEach(bar => {
+    bar.style.width = bar.dataset.w + '%';
+  });
+}
+// Animate initial panel on load
+setTimeout(() => animateBars(document.getElementById('panel-backend')), 400);
+
+// Contact form
+function sendMsg(btn) {
+  btn.textContent = '✓ Message Sent!';
+  btn.style.background = '#059669';
+  setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+}
+</script>
+</body>
+</html>
